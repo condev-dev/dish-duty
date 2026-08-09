@@ -4,20 +4,25 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>امشب نوبت کیه؟</title>
+    <meta
+      name="description"
+      content="چرخونه تعیین نوبت شستن ظرف بین همخونه‌ها"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <link
       href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap"
       rel="stylesheet"
     />
-    <link rel="manifest" href="/manifest.json" />
+    <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#16302e" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
     />
-    <link rel="apple-touch-icon" href="/icon-192.png" />
+    <meta name="apple-mobile-web-app-title" content="نوبت کیه" />
+    <link rel="apple-touch-icon" href="icon-192.png" />
     <style>
       :root {
         --tile: #16302e;
@@ -297,6 +302,137 @@
           transition: none;
         }
       }
+
+      .install-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(10, 20, 19, 0.72);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        z-index: 50;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease;
+        padding: 16px;
+      }
+      .install-overlay.show {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .install-card {
+        position: relative;
+        width: 100%;
+        max-width: 420px;
+        background: var(--tile-2);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 20px;
+        padding: 26px 22px 22px;
+        text-align: right;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+        transform: translateY(20px);
+        transition: transform 0.3s ease;
+      }
+      .install-overlay.show .install-card {
+        transform: translateY(0);
+      }
+      .install-close {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: none;
+        border: none;
+        color: var(--suds);
+        font-size: 20px;
+        cursor: pointer;
+        padding: 4px 8px;
+        line-height: 1;
+      }
+      .install-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 18px;
+        background: var(--tile);
+        border: 2px solid var(--glove);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        margin: 0 0 14px;
+      }
+      .install-card h3 {
+        margin: 0 0 8px;
+        font-size: 19px;
+        font-weight: 900;
+        color: var(--porcelain);
+      }
+      .install-card > p {
+        margin: 0 0 14px;
+        font-size: 13.5px;
+        color: var(--suds);
+        opacity: 0.9;
+        line-height: 1.7;
+      }
+      .install-benefits {
+        list-style: none;
+        margin: 0 0 18px;
+        padding: 0;
+        text-align: right;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .install-benefits li {
+        font-size: 13.5px;
+        color: var(--porcelain);
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        padding: 8px 12px;
+      }
+      .install-btn {
+        display: block;
+        width: 100%;
+        padding: 13px;
+        background: var(--glove);
+        color: var(--ink);
+        font-family: inherit;
+        font-weight: 900;
+        font-size: 15.5px;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        box-shadow: 0 6px 0 #b17d1b;
+        margin-bottom: 10px;
+      }
+      .install-btn:active {
+        transform: translateY(4px);
+        box-shadow: 0 2px 0 #b17d1b;
+      }
+      .install-later {
+        background: none;
+        border: none;
+        color: var(--suds);
+        font-family: inherit;
+        font-size: 30px;
+        cursor: pointer;
+        padding: 0px;
+        opacity: 1;
+        position: absolute;
+        left: 25px;
+        top: 12px !important;
+      }
+      .install-ios-steps {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 12px 14px;
+        margin-bottom: 10px;
+      }
+      .install-ios-steps p {
+        margin: 0;
+        font-size: 13px;
+        color: var(--porcelain);
+        line-height: 1.8;
+      }
     </style>
   </head>
   <body>
@@ -337,6 +473,31 @@
       <div class="history" id="history"></div>
 
       <footer>ConDev ©</footer>
+    </div>
+
+    <div class="install-overlay" id="installOverlay">
+      <div class="install-card">
+        <button class="install-later" id="installLater" aria-label="بستن">
+          ×
+        </button>
+        <div class="install-icon">🍽️</div>
+        <h3>اپ رو نصب کن</h3>
+        <p>
+          «امشب نوبت کیه؟» رو روی گوشیت نصب کن تا همیشه یه کلیک باهاش فاصله
+          داشته باشی.
+        </p>
+        <ul class="install-benefits">
+          <li>⚡ باز شدن سریع، بدون مرورگر</li>
+          <li>📴 حتی بدون اینترنت هم کار می‌کنه</li>
+        </ul>
+        <button class="install-btn" id="installBtn">نصب کن</button>
+        <div class="install-ios-steps" id="iosSteps" style="display: none">
+          <p>
+            برای نصب رو آیفون: پایین صفحه دکمه
+            <b>Share ⬆️</b> رو بزن، بعد <b>Add to Home Screen</b> رو انتخاب کن.
+          </p>
+        </div>
+      </div>
     </div>
 
     <script>
@@ -479,8 +640,71 @@
     </script>
     <script>
       if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("/sw.js");
+        navigator.serviceWorker.register("./sw.js");
       }
+    </script>
+
+    <script>
+      (function () {
+        const overlay = document.getElementById("installOverlay");
+        const installBtn = document.getElementById("installBtn");
+        const installLater = document.getElementById("installLater");
+        const installClose = document.getElementById("installClose");
+        const iosSteps = document.getElementById("iosSteps");
+
+        let deferredPrompt = null;
+        const DISMISS_KEY = "nobat-install-dismissed";
+
+        function isStandalone() {
+          return (
+            window.matchMedia("(display-mode: standalone)").matches ||
+            window.navigator.standalone === true
+          );
+        }
+        function isIOS() {
+          return (
+            /iphone|ipad|ipod/i.test(window.navigator.userAgent) &&
+            !window.MSStream
+          );
+        }
+
+        function showOverlay() {
+          if (isStandalone() || localStorage.getItem(DISMISS_KEY)) return;
+          setTimeout(() => overlay.classList.add("show"), 1800);
+        }
+
+        function hideOverlay(remember) {
+          overlay.classList.remove("show");
+          if (remember) localStorage.setItem(DISMISS_KEY, "1");
+        }
+
+        window.addEventListener("beforeinstallprompt", (e) => {
+          e.preventDefault();
+          deferredPrompt = e;
+          showOverlay();
+        });
+
+        if (isIOS() && !isStandalone()) {
+          installBtn.style.display = "none";
+          iosSteps.style.display = "block";
+          showOverlay();
+        }
+
+        installBtn.addEventListener("click", async () => {
+          if (!deferredPrompt) return;
+          hideOverlay(true);
+          deferredPrompt.prompt();
+          try {
+            await deferredPrompt.userChoice;
+          } catch (e) {}
+          deferredPrompt = null;
+        });
+
+        installLater.addEventListener("click", () => hideOverlay(true));
+        installClose.addEventListener("click", () => hideOverlay(true));
+
+        window.addEventListener("appinstalled", () => hideOverlay(true));
+      })();
     </script>
   </body>
 </html>
